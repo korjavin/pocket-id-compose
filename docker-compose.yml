@@ -9,7 +9,7 @@ services:
       - DB_PROVIDER=postgres
       - DB_CONNECTION_STRING=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
       - APP_URL=https://${POCKET_ID_HOST}
-      - PORT=9093
+      - PORT=1411
       - POCKET_ID_LOG_LEVEL=${POCKET_ID_LOG_LEVEL}
       - POCKET_ID_OIDC_CLIENT_ID=${POCKET_ID_OIDC_CLIENT_ID}
       - POCKET_ID_OIDC_CLIENT_SECRET=${POCKET_ID_OIDC_CLIENT_SECRET}
@@ -22,13 +22,13 @@ services:
       - "traefik.http.routers.pocket-id.rule=Host(`${POCKET_ID_HOST}`)"
       - "traefik.http.routers.pocket-id.entrypoints=websecure"
       - "traefik.http.routers.pocket-id.tls.certresolver=myresolver"
-      - "traefik.http.services.pocket-id.loadbalancer.server.port=9093"
+      - "traefik.http.services.pocket-id.loadbalancer.server.port=1411"
     networks:
       - pocket-id-network
     depends_on:
       - db
     ports:
-      - 9093:9093
+      - 1411:1411
 
   db:
     image: postgres:15-alpine
