@@ -6,9 +6,10 @@ services:
     container_name: pocket-id
     restart: unless-stopped
     environment:
-      - POCKET_ID_DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
-      - POCKET_ID_HOST=${POCKET_ID_HOST}
-      - POCKET_ID_PORT=${POCKET_ID_PORT}
+      - DB_PROVIDER=postgres
+      - DB_CONNECTION_STRING=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
+      - APP_URL=https://${POCKET_ID_HOST}
+      - PORT=${POCKET_ID_PORT}
       - POCKET_ID_LOG_LEVEL=${POCKET_ID_LOG_LEVEL}
       - POCKET_ID_OIDC_CLIENT_ID=${POCKET_ID_OIDC_CLIENT_ID}
       - POCKET_ID_OIDC_CLIENT_SECRET=${POCKET_ID_OIDC_CLIENT_SECRET}
