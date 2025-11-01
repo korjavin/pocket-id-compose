@@ -24,11 +24,7 @@ services:
       - "traefik.http.routers.pocket-id.tls.certresolver=myresolver"
       - "traefik.http.services.pocket-id.loadbalancer.server.port=1411"
     networks:
-      - pocket-id-network
-    depends_on:
-      - db
-    ports:
-      - 1411:1411
+      - vaultwarden_default
 
   db:
     image: postgres:15-alpine
@@ -41,11 +37,11 @@ services:
     volumes:
       - pocket-id-data:/var/lib/postgresql/data
     networks:
-      - pocket-id-network
+      - vaultwarden_default
 
 networks:
-  pocket-id-network:
-    driver: bridge
+  vaultwarden_default:
+    external: true
 
 volumes:
   pocket-id-data:
