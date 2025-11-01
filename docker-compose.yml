@@ -7,27 +7,35 @@ services:
     restart: unless-stopped
     environment:
       - DB_PROVIDER=postgres
-      - DB_CONNECTION_STRING=postgresql://pocket-id:pocket-id@db:5432/pocket-id?sslmode=disable
+      - DB_CONNECTION_STRING=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable
       - APP_URL=https://${POCKET_ID_HOST}
       - PORT=${POCKET_ID_PORT}
       - POCKET_ID_LOG_LEVEL=${POCKET_ID_LOG_LEVEL}
       - POCKET_ID_OIDC_CLIENT_ID=${POCKET_ID_OIDC_CLIENT_ID}
       - POCKET_ID_OIDC_CLIENT_SECRET=${POCKET_ID_OIDC_CLIENT_SECRET}
       - POCKET_ID_OIDC_REDIRECT_URI=${POCKET_ID_OIDC_REDIRECT_URI}
-      - POSTGRES_USER=pocket-id
-      - POSTGRES_PASSWORD=pocket-id
-      - POSTGRES_DB=pocket-id
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pocket-id.rule=Host(`${POCKET_ID_HOST}`)"
+      - "traefik.http.routers.pocket-id.entrypoints=websecure"
+      - "traefik.http.routers.pocket-id.tls.certresolver=myresolver"
+      - "traefik.http.services.pocket-id.loadbalancer.server.port=${POCKET_ID_PORT}"
     networks:
       - pocket-id-network
+    depends_on:
+      - db
 
   db:
     image: postgres:15-alpine
     container_name: pocket-id-db
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=pocket-id
-      - POSTGRES_PASSWORD=pocket-id
-      - POSTGRES_DB=pocket-id
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - pocket-id-data:/var/lib/postgresql/data
     networks:
