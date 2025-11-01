@@ -37,7 +37,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
-      # - pocket-id-data:/var/lib/postgresql/data
+      - pocket-id-data:/var/lib/postgresql/data
     networks:
       - pocket-id-network
 
@@ -45,5 +45,5 @@ networks:
   pocket-id-network:
     driver: bridge
 
-# volumes:
-#   pocket-id-data:
+volumes:
+  pocket-id-data:
