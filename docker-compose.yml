@@ -22,6 +22,7 @@ services:
       - "traefik.http.routers.pocket-id.rule=Host(`${POCKET_ID_HOST}`)"
       - "traefik.http.routers.pocket-id.entrypoints=websecure"
       - "traefik.http.routers.pocket-id.tls.certresolver=myresolver"
+      - "traefik.http.services.pocket-id.loadbalancer.server.port=9093"
     networks:
       - pocket-id-network
     depends_on:
